@@ -1,0 +1,145 @@
+<title>Roblox Top 100 Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a research dossier. One reading column, a sticky chip nav, and full-width data
+   trays for the Top 100 table and code. Accent = signal orange for verdicts; teal marks
+   "durable" findings. */
+:root {
+  --bg: #f2f3f5; --paper: #ffffff; --ink: #15181e; --muted: #5b6270; --line: #d9dce2;
+  --accent: #c8421c; --accent2: #17796a; --code: #f4f5f7; --chip: #e8eaee; --mark: #fff2c7;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1115; --paper: #171a20; --ink: #e7e9ee; --muted: #a0a7b4; --line: #2a2f38;
+  --accent: #ff7a50; --accent2: #4cc3ae; --code: #1b1f27; --chip: #222731; --mark: #3a3216; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f1115; --paper: #171a20; --ink: #e7e9ee; --muted: #a0a7b4; --line: #2a2f38;
+  --accent: #ff7a50; --accent2: #4cc3ae; --code: #1b1f27; --chip: #222731; --mark: #3a3216; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 28px 80px; }
+header.hero { padding: 36px clamp(18px, 4vw, 44px); background: var(--paper); border: 1px solid var(--line); border-radius: 14px; display: grid; gap: 14px; }
+.kicker { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.15; text-wrap: balance; margin: 1.6em 0 .5em; }
+h1 { font-size: clamp(2rem, 1.3rem + 3vw, 3.3rem); font-weight: 800; margin: 0; letter-spacing: -.01em; }
+h2 { font-size: clamp(1.45rem, 1.1rem + 1.4vw, 2rem); font-weight: 800; padding-top: .4em; border-top: 3px solid var(--ink); }
+h3 { font-size: 1.2rem; font-weight: 800; }
+h4 { font-size: 1.02rem; font-weight: 600; }
+p, li { max-width: 72ch; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, summary:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+nav.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding: 10px 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+nav.toc a { flex: none; font-family: var(--f-display); font-weight: 600; font-size: 13px; text-decoration: none; color: var(--ink); background: var(--chip); border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; }
+nav.toc a:hover { border-color: var(--accent); }
+.sec { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 4px clamp(18px, 4vw, 44px) 28px; margin-top: 18px; min-width: 0; }
+.sec > h2:first-child { border-top: none; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; font-family: var(--f-body); }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.sec table { display: block; overflow-x: auto; }
+code { font-family: var(--f-mono); font-size: .86em; background: var(--code); padding: .08em .35em; border-radius: 4px; overflow-wrap: anywhere; }
+pre { background: var(--code); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-size: 13.5px; line-height: 1.5; }
+pre code { background: none; padding: 0; overflow-wrap: normal; }
+blockquote { margin: 1em 0; padding: 8px 16px; border-left: 4px solid var(--accent2); background: var(--code); border-radius: 0 8px 8px 0; }
+details.concept { border: 1px solid var(--line); border-radius: 10px; margin: 10px 0; background: var(--paper); }
+details.concept > summary { cursor: pointer; padding: 4px 16px; list-style: none; }
+details.concept > summary::-webkit-details-marker { display: none; }
+details.concept > summary h3 { margin: .5em 0; display: flex; gap: 8px; align-items: baseline; }
+details.concept > summary h3::before { content: "+"; font-family: var(--f-mono); color: var(--accent); width: 1ch; }
+details.concept[open] > summary h3::before { content: "–"; }
+details.concept > :not(summary) { padding: 0 18px; }
+details.concept[open] { padding-bottom: 12px; }
+h3.winner { color: var(--accent); }
+/* Top 100 tray */
+.tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; }
+.tools input, .tools select { font: 15px var(--f-body); color: var(--ink); background: var(--code); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; min-width: 0; }
+.tools .count { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.tray { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; max-height: 760px; }
+#t100 table { display: table; font-size: 14px; }
+#t100 th { position: sticky; top: 0; background: var(--paper); cursor: pointer; white-space: nowrap; z-index: 1; }
+#t100 th[aria-sort="ascending"]::after { content: " ▲"; } #t100 th[aria-sort="descending"]::after { content: " ▼"; }
+#t100 td.n { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; font-family: var(--f-mono); font-size: 12.5px; }
+#t100 tr.row { cursor: pointer; } #t100 tr.row:hover td { background: var(--code); }
+#t100 tr.more td { background: var(--code); font-size: 14px; }
+#t100 .tagc { display: inline-block; font-family: var(--f-mono); font-size: 11px; padding: 1px 6px; border-radius: 999px; background: var(--chip); margin: 1px 2px 1px 0; white-space: nowrap; }
+.dl { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 4px 12px; padding: 6px 2px; }
+.dl b { font-family: var(--f-mono); font-size: 11.5px; text-transform: uppercase; color: var(--muted); font-weight: 600; padding-top: 2px; }
+@media (max-width: 560px) { .dl { grid-template-columns: 1fr; } body { font-size: 16px; } }
+.legend { font-size: 14px; color: var(--muted); }
+footer { margin-top: 24px; font-size: 14px; color: var(--muted); }
+</style>
+<div class="wrap">
+<header class="hero">
+  <div class="kicker">Market research · Roblox Top Playing Now · snapshot 2026-11-08 18:23 UTC</div>
+  <h1>Roblox Top 100 Report</h1>
+  {{INTRO}}
+</header>
+<nav class="toc" aria-label="Sections">{{NAV}}</nav>
+{{BODY}}
+<footer>Verified numbers come from Roblox's public APIs at the snapshot time; "reported" means a third-party source; "analysis" means our inference. Data files: top100_data.json and analysis_all.json.</footer>
+</div>
+<script id="rows" type="application/json">{{DATA}}</script>
+<script>
+(function () {
+  var rows = []; try { rows = JSON.parse(document.getElementById("rows").textContent); } catch (e) {}
+  var host = document.getElementById("t100"); if (!host) return;
+  var tags = {}; rows.forEach(function (r) { r.g.forEach(function (t) { tags[t] = (tags[t] || 0) + 1; }); });
+  var tagList = Object.keys(tags).sort(function (a, b) { return tags[b] - tags[a]; });
+  host.innerHTML = '<div class="tools"><input id="q" type="search" placeholder="Search game, genre, loop…" aria-label="Search the Top 100">' +
+    '<select id="tag" aria-label="Filter by genre tag"><option value="">All genres</option>' +
+    tagList.map(function (t) { return '<option value="' + t + '">' + t + ' (' + tags[t] + ')</option>'; }).join("") + '</select>' +
+    '<select id="mode" aria-label="Filter by player mode"><option value="">All modes</option><option>PvP</option><option>Co-op PvE</option><option>Mixed</option><option>Social</option><option>Single-player-in-server</option></select>' +
+    '<span class="count" id="cnt"></span></div><p class="legend">Click a column to sort. Click a row for the full analysis.</p>' +
+    '<div class="tray"><table><thead><tr>' +
+    [["r","#"],["n","Game"],["g","Genres"],["m","Mode"],["c","CCU"],["v","Visits"],["f","Favorites"],["l","Like %"],["a","Age (d)"],["d","Difficulty"]]
+      .map(function (h) { return '<th scope="col" data-k="' + h[0] + '">' + h[1] + '</th>'; }).join("") +
+    '</tr></thead><tbody id="tb"></tbody></table></div>';
+  var tb = document.getElementById("tb"), q = document.getElementById("q"), tg = document.getElementById("tag"), md = document.getElementById("mode");
+  var sortK = "r", dir = 1, open = {};
+  function fmt(n) { return n >= 1e9 ? (n / 1e9).toFixed(2) + "B" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "k" : String(n); }
+  function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+  function render() {
+    var s = (q.value || "").toLowerCase(), t = tg.value, m = md.value;
+    var list = rows.filter(function (r) {
+      if (t && r.g.indexOf(t) < 0) return false;
+      if (m && r.m !== m) return false;
+      if (s && (r.n + " " + r.g.join(" ") + " " + r.loop + " " + r.rg).toLowerCase().indexOf(s) < 0) return false;
+      return true;
+    }).sort(function (a, b) {
+      var x = a[sortK], y = b[sortK]; if (Array.isArray(x)) { x = x.join(); y = y.join(); }
+      return (x > y ? 1 : x < y ? -1 : 0) * dir;
+    });
+    document.getElementById("cnt").textContent = list.length + " of " + rows.length + " games";
+    var h = "";
+    list.forEach(function (r) {
+      h += '<tr class="row" data-r="' + r.r + '"><td class="n">' + r.r + '</td><td><a href="' + esc(r.u) + '" target="_blank" rel="noopener">' + esc(r.n) + '</a></td><td>' +
+        r.g.slice(0, 4).map(function (x) { return '<span class="tagc">' + esc(x) + '</span>'; }).join("") + '</td><td>' + esc(r.m) + '</td><td class="n">' + r.c.toLocaleString("en-US") +
+        '</td><td class="n">' + fmt(r.v) + '</td><td class="n">' + fmt(r.f) + '</td><td class="n">' + r.l + '</td><td class="n">' + r.a + '</td><td>' + esc(r.d) + '</td></tr>';
+      if (open[r.r]) {
+        h += '<tr class="more"><td></td><td colspan="9"><div class="dl">' +
+          [["Roblox genre", r.rg], ["Core loop", r.loop], ["Why they return", r.ret], ["Monetization", r.mon + " · " + r.gp + " passes, " + r.dp + " dev products"],
+           ["Pay-to-win risk", r.p2w], ["Success drivers", r.succ], ["Trajectory", r.t], ["Sustainability", r.risk], ["Evidence", r.ev]]
+            .map(function (p) { return "<b>" + p[0] + "</b><span>" + esc(p[1]) + "</span>"; }).join("") +
+          (r.src.length ? "<b>Sources</b><span>" + r.src.map(function (u) { return '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(u.replace(/^https?:\/\//, "").slice(0, 60)) + "</a>"; }).join("<br>") + "</span>" : "") +
+          "</div></td></tr>";
+      }
+    });
+    tb.innerHTML = h;
+    document.querySelectorAll("#t100 th").forEach(function (th) { th.setAttribute("aria-sort", th.dataset.k === sortK ? (dir > 0 ? "ascending" : "descending") : "none"); });
+  }
+  host.addEventListener("click", function (e) {
+    var th = e.target.closest("th"); if (th) { var k = th.dataset.k; if (sortK === k) dir = -dir; else { sortK = k; dir = (k === "n" || k === "m" || k === "d" || k === "r") ? 1 : -1; } render(); return; }
+    if (e.target.closest("a")) return;
+    var tr = e.target.closest("tr.row"); if (tr) { var r = +tr.dataset.r; open[r] = !open[r]; render(); }
+  });
+  [q, tg, md].forEach(function (el) { el.addEventListener("input", render); });
+  render();
+})();
+</script>
